@@ -46,8 +46,8 @@ if __name__ == "__main__":
 
 Running the above code generates a `pwl.txt` file in the specified directory.
 
-<img src="file:///C:/Users/User/Documents/GitHub/PWL/PWL-GENERATOR/assets/2022-02-27-16-07-45-image.png" title="" alt="" data-align="center">
+<img title="" src="https://raw.githubusercontent.com/Prof-Iz/PWL-GENERATOR-PY/main/assets/2022-02-27-16-07-45-image.png" alt="" data-align="center">
 
 Taking the **PWL** file into an LTSpice Circuit for testing we end up confirming that the result is as expected.
 
-![](C:\Users\User\Documents\GitHub\PWL\PWL-GENERATOR\assets\2022-02-27-16-12-38-image.png)
+![](https://raw.githubusercontent.com/Prof-Iz/PWL-GENERATOR-PY/main/assets/2022-02-27-16-12-38-image.png)
