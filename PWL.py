@@ -15,7 +15,7 @@ def make_pwl(sequence:str,bit_rate:float,filename="pwl.txt",voltage_level = 5):
     half = bit_period/2
     mid = bit_period/2
     with open(filename,"w") as f:
-        for i, bit in enumerate(sequence):
+        for bit in sequence:
             f.write(f"{EngNumber(mid - half)}\t{int(bit) * voltage_level}\n")
             f.write(f"{EngNumber(mid + half - half/10 )}\t{int(bit) * voltage_level}\n")
             mid = bit_period + mid
