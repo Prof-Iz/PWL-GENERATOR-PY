@@ -1,4 +1,4 @@
-# Making a Digital Input Sequence
+# Making a Digital Input Sequence 🔗 https://prof-iz.github.io/PWL-GENERATOR-PY/
 
 So there I was when my physical lab had failed and then my lecturer asked me to simulate my circuit instead. It was my first time using LTSpice and I had to make a Digital input sequence. In LTSpice XVII this is achieved via a PWL source. However, this source has to be manually input and I am a lazy person. So, I decided to code a short python script to generate my PWL source given a sequence and frequency.
 
