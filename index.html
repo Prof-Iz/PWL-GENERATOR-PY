@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>PWL</title>
+        <link rel="stylesheet" href="https://pyscript.net/alpha/pyscript.css" />
+        <link
+            href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css"
+            rel="stylesheet"
+            integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor"
+            crossorigin="anonymous">
+        
+        <script defer src="https://pyscript.net/alpha/pyscript.js"></script>
+        <py-env>
+            - engineering_notation
+            - pandas
+        </py-env>
+    </head>
+    <body>
+        <div class="container p-6 mt-5">
+            <h1 class="mb-3">Simple PWL Generator for use with LTSpice</h1>
+            <p>
+                This is a simple tool to generate a PWL for use with LTSpice. Please enter the requirements below to generate the timing and 
+                voltage values for the PWL. You may copy them to a txt file to later import into your Simulation software of choice.
+            <div class="row">
+                <div class="col-sm mb-2">
+                  <input type="text" class="form-control" placeholder="Enter Voltage Level ex: 5" id="voltage">
+                </div>
+                <div class="col-sm mb-2">
+                  <input type="text" class="form-control" placeholder="Enter Bit Rate in Bps ex: 10000" id="bit_rate">
+                </div>
+                <div class="col-sm mb-2">
+                    <div class="input-group mb-3">
+                        <input type="text" class="form-control" placeholder="Enter Sequence ex: 101001" id="sequence" >
+                        <button class="btn btn-outline-secondary" type="button" id="generate">Generate</button>
+                      </div>
+                </div>
+              </div>
+            <div class="container" id="output"></div>
+            <py-script>
+                from pyodide import create_proxy
+                from engineering_notation import EngNumber
+                import pandas as pd
+
+                def list_pwl(sequence:str,bit_rate:float,voltage_level:float):
+                    bit_period = 1/bit_rate
+                    half = bit_period/2
+                    mid = bit_period/2
+
+                    output_voltage = []
+                    output_timestamp = []
+                    for bit in sequence:
+                        output_timestamp.append(EngNumber(mid - half,5))
+                        output_voltage.append(int(bit) * voltage_level)
+                        output_timestamp.append(EngNumber(mid + half - half/100000,5 ))
+                        output_voltage.append(int(bit) * voltage_level)
+
+                        mid = bit_period + mid
+
+                    final_output_df = pd.DataFrame({'timestamp':output_timestamp,'voltage':output_voltage})
+                    return final_output_df
+
+                generate_button = document.getElementById('generate')
+
+                def generate_pwl_table(event):
+                    sequence = document.getElementById('sequence').value
+                    bit_rate = float(document.getElementById('bit_rate').value)
+                    voltage_level = float(document.getElementById('voltage').value)
+                    result = list_pwl(sequence,bit_rate,voltage_level)
+                    pyscript.write('output',result.to_html(index=False,classes="table"))
+                
+                generate_proxy = create_proxy(generate_pwl_table)
+
+                generate_button.addEventListener('click',generate_proxy)
+                
+            </py-script>
+
+            
+        </div>
+
+
+        <script
+            src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2"
+            crossorigin="anonymous"></script>
+    </body>
+</html>
